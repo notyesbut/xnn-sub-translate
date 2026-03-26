@@ -14,11 +14,13 @@ Completed in this bootstrap:
 - product and architecture documentation
 - initial repository structure for desktop app, engine, and shared contracts
 - project-specific agent instructions
+- root workspace bootstrap
+- initial engine domain contracts and project layout code
 
 Next implementation target:
 
 1. text subtitle import for `.srt` and `.ass`
-2. internal project model and SQLite storage
+2. SQLite project storage and persistence layer
 3. batched English translation pipeline
 4. `.srt` export
 5. minimal desktop review workflow
@@ -74,6 +76,12 @@ docs/
 - [Implementation Roadmap](./docs/implementation/roadmap.md)
 - [Agent Workflows](./docs/implementation/agent-workflows.md)
 
+## Current Verification Commands
+
+- `pnpm docs:list`
+- `pnpm engine:test`
+- `pnpm engine:compile`
+
 ## Working Principles
 
 - Keep the user-facing workflow simple and guided.
@@ -81,4 +89,3 @@ docs/
 - Build the subtitle pipeline before advanced UX and OCR work.
 - Add advanced sync and image subtitle support after the text-subtitle MVP is solid.
 - Treat docs and contracts as first-class implementation artifacts.
-

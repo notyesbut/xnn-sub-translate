@@ -2,7 +2,12 @@
 
 ## Current Status
 
-The repository is currently documentation-first. Application scaffolding and runtime commands will be added in the next implementation phase.
+The repository now includes:
+
+- product and architecture docs
+- a root workspace bootstrap
+- a first Python engine package with core domain contracts
+- project layout helpers and unit tests
 
 ## Planned Tooling
 
@@ -20,17 +25,21 @@ The repository is currently documentation-first. Application scaffolding and run
 - prefer local fixtures over brittle remote dependencies
 - keep MVP development focused on text subtitle flow first
 
+## Current Commands
+
+- `pnpm docs:list`
+- `pnpm engine:test`
+- `pnpm engine:compile`
+
 ## Expected Future Commands
 
-These will be finalized once scaffolding lands:
+These will expand once more scaffolding lands:
 
 - install desktop dependencies
-- create Python virtual environment
 - run desktop dev mode
-- run engine tests
+- run engine integration tests
 - run full project verification
 
 ## Local Asset Policy
 
 Large media files and project exports should remain out of git. Use fixture-sized samples for automated testing and keep local project outputs in ignored directories.
-
