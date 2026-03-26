@@ -1,0 +1,55 @@
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local Codex state
+.codex-local/
+
+# Node and frontend
+node_modules/
+dist/
+build/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Rust and Tauri
+target/
+src-tauri/target/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# SQLite and app runtime files
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# Media and export artifacts
+projects/
+exports/
+tmp/
+temp/
+artifacts/
+*.mkv
+*.mp4
+*.m2ts
+*.sup
+*.sub
+*.idx
