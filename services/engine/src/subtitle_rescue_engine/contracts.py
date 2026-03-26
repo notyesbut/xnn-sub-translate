@@ -41,6 +41,17 @@ def _serialize(value: Any) -> Any:
     return value
 
 
+class SubtitleFormat(StrEnum):
+    SRT = "srt"
+    ASS = "ass"
+
+
+class ProjectAssetKind(StrEnum):
+    SUBTITLE = "subtitle"
+    VIDEO = "video"
+    GLOSSARY = "glossary"
+
+
 class ProjectStatus(StrEnum):
     CREATED = "created"
     DETECTING = "detecting"
@@ -87,13 +98,27 @@ class ExportStatus(StrEnum):
     FAILED = "failed"
 
 
+class TranslationPass(StrEnum):
+    LITERAL = "literal"
+    NATURAL = "natural"
+    REPAIR = "repair"
+
+
+class TranslationBatchStatus(StrEnum):
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CACHED = "cached"
+
+
 @dataclass(slots=True)
 class Project:
     project_id: str
     name: str
     source_language: str
     target_language: str = "en"
-    source_subtitle_type: str | None = None
+    source_subtitle_type: SubtitleFormat | None = None
     target_video_path: str | None = None
     reference_video_path: str | None = None
     status: ProjectStatus = ProjectStatus.CREATED
@@ -104,6 +129,28 @@ class Project:
         _require_non_empty("name", self.name)
         _require_non_empty("source_language", self.source_language)
         _require_non_empty("target_language", self.target_language)
+
+    def model_dump(self) -> dict[str, Any]:
+        return _serialize(self)
+
+
+@dataclass(slots=True)
+class ProjectAsset:
+    asset_id: str
+    project_id: str
+    kind: ProjectAssetKind
+    original_name: str
+    stored_path: str
+    checksum: str
+    format: SubtitleFormat | None = None
+    created_at: str = field(default_factory=utc_now_iso)
+
+    def __post_init__(self) -> None:
+        _require_non_empty("asset_id", self.asset_id)
+        _require_non_empty("project_id", self.project_id)
+        _require_non_empty("original_name", self.original_name)
+        _require_non_empty("stored_path", self.stored_path)
+        _require_non_empty("checksum", self.checksum)
 
     def model_dump(self) -> dict[str, Any]:
         return _serialize(self)
@@ -200,7 +247,7 @@ class GlossaryTerm:
 class ExportArtifact:
     export_id: str
     project_id: str
-    format: str
+    format: SubtitleFormat
     path: str
     status: ExportStatus = ExportStatus.PENDING
     created_at: str = field(default_factory=utc_now_iso)
@@ -208,8 +255,104 @@ class ExportArtifact:
     def __post_init__(self) -> None:
         _require_non_empty("export_id", self.export_id)
         _require_non_empty("project_id", self.project_id)
-        _require_non_empty("format", self.format)
         _require_non_empty("path", self.path)
+
+    def model_dump(self) -> dict[str, Any]:
+        return _serialize(self)
+
+
+@dataclass(slots=True)
+class TranslationSegmentInput:
+    id: int
+    source_text: str
+    normalized_source_text: str
+    context_before: str | None = None
+    context_after: str | None = None
+
+    def __post_init__(self) -> None:
+        _require_non_negative("id", self.id)
+        _require_non_empty("source_text", self.source_text)
+        _require_non_empty("normalized_source_text", self.normalized_source_text)
+
+    def model_dump(self) -> dict[str, Any]:
+        return _serialize(self)
+
+
+@dataclass(slots=True)
+class TranslationSegmentResult:
+    id: int
+    translated_text: str
+    notes: str | None = None
+    confidence: float | None = None
+    warnings: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        _require_non_negative("id", self.id)
+        _require_non_empty("translated_text", self.translated_text)
+        _require_probability("confidence", self.confidence)
+
+    def model_dump(self) -> dict[str, Any]:
+        return _serialize(self)
+
+
+@dataclass(slots=True)
+class TranslationBatch:
+    batch_id: str
+    project_id: str
+    pass_type: TranslationPass
+    source_language: str
+    target_language: str
+    segments: list[TranslationSegmentInput]
+    glossary_terms: list[GlossaryTerm] = field(default_factory=list)
+    locked_names: list[str] = field(default_factory=list)
+    cache_key: str | None = None
+    attempt_count: int = 0
+    status: TranslationBatchStatus = TranslationBatchStatus.PENDING
+
+    def __post_init__(self) -> None:
+        _require_non_empty("batch_id", self.batch_id)
+        _require_non_empty("project_id", self.project_id)
+        _require_non_empty("source_language", self.source_language)
+        _require_non_empty("target_language", self.target_language)
+        if not self.segments:
+            raise ValueError("segments must not be empty")
+        _require_non_negative("attempt_count", self.attempt_count)
+
+    def model_dump(self) -> dict[str, Any]:
+        return _serialize(self)
+
+
+@dataclass(slots=True)
+class TranslationBatchResult:
+    batch_id: str
+    pass_type: TranslationPass
+    results: list[TranslationSegmentResult]
+    raw_response_text: str | None = None
+    model: str | None = None
+    provider_latency_ms: int | None = None
+
+    def __post_init__(self) -> None:
+        _require_non_empty("batch_id", self.batch_id)
+        if not self.results:
+            raise ValueError("results must not be empty")
+        if self.provider_latency_ms is not None:
+            _require_non_negative("provider_latency_ms", self.provider_latency_ms)
+
+    def model_dump(self) -> dict[str, Any]:
+        return _serialize(self)
+
+
+@dataclass(slots=True)
+class TranslationCacheEntry:
+    cache_key: str
+    pass_type: TranslationPass
+    source_hash: str
+    response_payload: dict[str, Any]
+    created_at: str = field(default_factory=utc_now_iso)
+
+    def __post_init__(self) -> None:
+        _require_non_empty("cache_key", self.cache_key)
+        _require_non_empty("source_hash", self.source_hash)
 
     def model_dump(self) -> dict[str, Any]:
         return _serialize(self)

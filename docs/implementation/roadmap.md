@@ -23,11 +23,14 @@ Goal:
 
 Deliverables:
 
-- `.srt` and `.ass` import
-- normalization and internal segment model
-- SQLite project storage
-- translation batching and retry flow
-- `.srt` export
+- completed: `.srt` and `.ass` import
+- completed: normalization and internal segment model
+- completed: SQLite project storage
+- completed: translation batching, response validation, retry, and cache flow
+- completed: OpenAI Responses API provider adapter
+- completed: basic QA flag generation
+- completed: `.srt` export
+- remaining: live provider verification and desktop-facing engine API surface
 
 ## Phase 2: Minimal Desktop Workflow
 
@@ -50,7 +53,6 @@ Goal:
 
 Deliverables:
 
-- QA flags
 - glossary terms
 - retry selected lines
 - clearer warning cards
@@ -92,4 +94,3 @@ Deliverables:
 - reports
 - packaging
 - onboarding
-

@@ -16,6 +16,9 @@ class ProjectLayout:
     extracted: Path
     ocr: Path
     batches: Path
+    batch_requests: Path
+    batch_responses: Path
+    batch_cache: Path
     exports: Path
     logs: Path
     database: Path
@@ -30,6 +33,9 @@ class ProjectLayout:
             extracted=project_root / "extracted",
             ocr=project_root / "ocr",
             batches=project_root / "batches",
+            batch_requests=project_root / "batches" / "requests",
+            batch_responses=project_root / "batches" / "responses",
+            batch_cache=project_root / "batches" / "cache",
             exports=project_root / "exports",
             logs=project_root / "logs",
             database=project_root / "project.db",
@@ -41,6 +47,9 @@ class ProjectLayout:
         self.extracted.mkdir(parents=True, exist_ok=True)
         self.ocr.mkdir(parents=True, exist_ok=True)
         self.batches.mkdir(parents=True, exist_ok=True)
+        self.batch_requests.mkdir(parents=True, exist_ok=True)
+        self.batch_responses.mkdir(parents=True, exist_ok=True)
+        self.batch_cache.mkdir(parents=True, exist_ok=True)
         self.exports.mkdir(parents=True, exist_ok=True)
         self.logs.mkdir(parents=True, exist_ok=True)
         return self
@@ -52,6 +61,9 @@ class ProjectLayout:
             "extracted": str(self.extracted),
             "ocr": str(self.ocr),
             "batches": str(self.batches),
+            "batch_requests": str(self.batch_requests),
+            "batch_responses": str(self.batch_responses),
+            "batch_cache": str(self.batch_cache),
             "exports": str(self.exports),
             "logs": str(self.logs),
             "database": str(self.database),

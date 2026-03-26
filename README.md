@@ -6,24 +6,24 @@ The product is aimed at non-technical users who may have a video file, a foreign
 
 ## Current Status
 
-This repository is in foundation phase.
+This repository now has a real engine-side MVP slice instead of bootstrap-only scaffolding.
 
-Completed in this bootstrap:
+Implemented so far:
 
-- public GitHub repository creation
-- product and architecture documentation
-- initial repository structure for desktop app, engine, and shared contracts
-- project-specific agent instructions
-- root workspace bootstrap
-- initial engine domain contracts and project layout code
+- `.srt` and `.ass` subtitle import
+- subtitle normalization into stable segment contracts
+- project-local SQLite persistence plus artifact folders
+- translation batching, strict response validation, retry, and cache orchestration
+- OpenAI Responses API translation client adapter
+- basic QA flag generation for review
+- `.srt` export
+- fixture-backed engine tests for parsing, persistence, translation orchestration, QA, and export
 
 Next implementation target:
 
-1. text subtitle import for `.srt` and `.ass`
-2. SQLite project storage and persistence layer
-3. batched English translation pipeline
-4. `.srt` export
-5. minimal desktop review workflow
+1. verify the live OpenAI translation path with configured credentials
+2. expose the workflow through the minimal desktop shell
+3. add source language detect/manual override and review UI
 
 ## Product Promise
 
@@ -46,7 +46,18 @@ The primary UX goal is simplicity. Users should see clear steps and friendly war
 - `packages/ui`: reusable desktop UI components
 - `docs`: product, architecture, implementation, and operations documentation
 
-The desktop shell will launch and control the local engine. Project data will be stored locally with SQLite plus project-specific artifact folders.
+The desktop shell will launch and control the local engine. Project data is stored locally with SQLite plus project-specific artifact folders.
+
+Implemented engine project layout:
+
+- `source/`: copied original inputs
+- `extracted/segments.json`: normalized subtitle snapshot
+- `batches/requests`: serialized translation requests
+- `batches/responses`: serialized translation responses
+- `batches/cache`: validated cached translation payloads
+- `exports/`: exported subtitle files
+- `logs/`: engine and job logs
+- `project.db`: SQLite project database
 
 ## Repository Layout
 

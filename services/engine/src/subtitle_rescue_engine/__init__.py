@@ -8,13 +8,32 @@ from .contracts import (
     JobStatus,
     JobType,
     Project,
+    ProjectAsset,
+    ProjectAssetKind,
     ProjectStatus,
     QAFlag,
     QAFlagSeverity,
     QAFlagStatus,
+    SubtitleFormat,
     SubtitleSegment,
+    TranslationBatch,
+    TranslationBatchResult,
+    TranslationBatchStatus,
+    TranslationCacheEntry,
+    TranslationPass,
+    TranslationSegmentInput,
+    TranslationSegmentResult,
 )
+from .qa import QAService
+from .project_service import ProjectService
 from .project_layout import ProjectLayout
+from .storage import ProjectRepository
+from .translation import (
+    OpenAIResponsesTranslationClient,
+    TranslationClient,
+    TranslationService,
+    TranslationSettings,
+)
 
 __all__ = [
     "ExportArtifact",
@@ -24,10 +43,27 @@ __all__ = [
     "JobStatus",
     "JobType",
     "Project",
+    "OpenAIResponsesTranslationClient",
+    "ProjectAsset",
+    "ProjectAssetKind",
     "ProjectLayout",
+    "ProjectRepository",
+    "ProjectService",
     "ProjectStatus",
+    "QAService",
     "QAFlag",
     "QAFlagSeverity",
     "QAFlagStatus",
+    "SubtitleFormat",
     "SubtitleSegment",
+    "TranslationClient",
+    "TranslationBatch",
+    "TranslationBatchResult",
+    "TranslationBatchStatus",
+    "TranslationCacheEntry",
+    "TranslationPass",
+    "TranslationSegmentInput",
+    "TranslationSegmentResult",
+    "TranslationService",
+    "TranslationSettings",
 ]
